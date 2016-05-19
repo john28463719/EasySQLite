@@ -1,12 +1,16 @@
 package com.easysqlite.mylibrary.johnwu;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by JohnWu on 2016/5/3.
@@ -57,15 +61,37 @@ public class MySQLite extends SQLiteOpenHelper {
         }
     }
 
+    public List<String> getStrings(String cols_name) {
+        List<String> list = new ArrayList<String>();
+        Cursor cursor = this.getWritableDatabase().query(mBuilder.TABLE_NAME, new String[]{cols_name}, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            int name_index = cursor.getColumnIndex(cols_name);
+            String name = cursor.getString(name_index);
+            list.add(name);
+        }
+        return list;
+    }
+
     public int getInt(String cols_name) {
         Cursor cursor = this.getWritableDatabase().query(mBuilder.TABLE_NAME, new String[]{cols_name}, null, null, null, null, null);
         if (cursor.moveToNext()) {
             int name_index = cursor.getColumnIndex(cols_name);
-            int name = cursor.getInt(name_index);
-            return name;
+            int values = cursor.getInt(name_index);
+            return values;
         } else {
             return -1;
         }
+    }
+
+    public List<Integer> getInts(String cols_name) {
+        List<Integer> list = new ArrayList<Integer>();
+        Cursor cursor = this.getWritableDatabase().query(mBuilder.TABLE_NAME, new String[]{cols_name}, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            int name_index = cursor.getColumnIndex(cols_name);
+            int values = cursor.getInt(name_index);
+            list.add(values);
+        }
+        return list;
     }
 
     public Bitmap getImage(String cols_name) {
