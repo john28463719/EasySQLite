@@ -7,7 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.StringDef;
 import android.util.Log;
+import static com.easysqlite.mylibrary.johnwu.Form.*;
+import static com.easysqlite.mylibrary.johnwu.Storage.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,18 +21,6 @@ import java.util.List;
 public class MySQLite extends SQLiteOpenHelper {
 
     private Builder mBuilder;
-
-    public interface Form {
-        public static final String TEXT = "TEXT";
-        public static final String INT = "INT";
-        public static final String INTEGER = "INTEGER";
-        public static final String BLOB = "BLOB";
-    }
-
-    public interface Storage {
-        public static final String NOT_NULL = "not null";
-        public static final String UNIQUE = "unique";
-    }
 
     public MySQLite(Context context, Builder builder) {
         super(context, builder.DATABASE_NAME, null, builder.DATABASE_VERSION);
@@ -111,16 +102,22 @@ public class MySQLite extends SQLiteOpenHelper {
 
     public boolean deleteAll() {
         int result = this.getWritableDatabase().delete(mBuilder.TABLE_NAME, null, null);
-        Log.i("john123", String.valueOf(result));
         return false;
     }
 
     public static class Builder {
 
+        @StringDef({TEXT,INT,INTEGER,BLOB})
+        private @interface Form {}
+
+        @StringDef({NOT_NULL,UNIQUE})
+        private @interface Storage {}
+
         private StringBuilder tableBuilder;
         private static String TABLE_NAME = "table_name";
         private static String DATABASE_NAME = "my_database";
         private static int DATABASE_VERSION = 1;
+
         private Context mContext;
 
         public Builder(Context context) {
@@ -128,12 +125,12 @@ public class MySQLite extends SQLiteOpenHelper {
             mContext = context;
         }
 
-        public Builder append(String columnName, String form) {
+        public Builder append(String columnName,@Form String form) {
             tableBuilder.append(columnName + " " + form + " , ");
             return this;
         }
 
-        public Builder append(String columnName, String form, String storage) {
+        public Builder append(String columnName,@Form String form,@Storage String storage) {
             if (storage == null) {
                 append(columnName, form);
             }

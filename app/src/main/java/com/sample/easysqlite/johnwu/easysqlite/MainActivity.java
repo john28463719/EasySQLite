@@ -9,7 +9,9 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
 
+import com.easysqlite.mylibrary.johnwu.Form;
 import com.easysqlite.mylibrary.johnwu.MySQLite;
+import com.easysqlite.mylibrary.johnwu.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mySQLite = new MySQLite.Builder(this)
                 .databaseName("Mydatabase")
                 .tableName(MYTABLE)
-                .append(COLUMN_TITLE, MySQLite.Form.TEXT)
-                .append(COLUMN_SUBTITLE, MySQLite.Form.TEXT)
+                .append(COLUMN_TITLE, Form.TEXT)
+                .append(COLUMN_SUBTITLE, Form.TEXT)
                 .build();
     }
 
