@@ -1,6 +1,7 @@
 package com.sample.easysqlite.johnwu.easysqlite;
 
 import android.content.ContentValues;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import com.easysqlite.mylibrary.johnwu.Form;
 import com.easysqlite.mylibrary.johnwu.MySQLite;
 import com.easysqlite.mylibrary.johnwu.Storage;
+import com.sample.easysqlite.johnwu.easysqlite.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String COLUMN_TITLE = "Title";
     private static final String COLUMN_SUBTITLE = "SubTitle";
 
-    private RecyclerView recyclerView;
-    private Button btn_insert;
+    private ActivityMainBinding mainBinding;
     private MySQLite mySQLite;
 
 
@@ -38,10 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void findviews() {
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        btn_insert = (Button) findViewById(R.id.btn_add);
-
-        btn_insert.setOnClickListener(this);
+        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mainBinding.btnAdd.setOnClickListener(this);
     }
 
     private void createTable() {
@@ -58,12 +57,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         List<String> titleList = mySQLite.getStrings(COLUMN_TITLE);
         List<String> subTitleList = mySQLite.getStrings(COLUMN_SUBTITLE);
         for (int i = 0; i < titleList.size(); i++) {
-            Article article = new Article(titleList.get(i),subTitleList.get(i));
+            Article article = new Article(titleList.get(i), subTitleList.get(i));
             list.add(article);
         }
         MyAdapter adapter = new MyAdapter(list);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mainBinding.recyclerview.setAdapter(adapter);
+        mainBinding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private Article generateArticle() {
